@@ -1,24 +1,15 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+Get the alpaca model.
 
-* Ruby version
+```
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
+make
+mkdir -p llama.cpp/models
+cd llama.cpp/models
+curl -o ggml-alpaca-7b-q4.bin -C - https://ipfs.io/ipfs/QmQ1bf2BTnYxq73MFJWu1B7bQ2UD6qG7D7YDCxhTndVkPC
+```
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+NOTE: You might have to checkout a git branch from a few days ago if the models weights are too old.
