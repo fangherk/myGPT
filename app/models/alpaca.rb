@@ -1,3 +1,5 @@
+require 'open3'
+
 class Alpaca
   ASSISTANT_PROMPT = """
   Assistant is a large language model trained by OpenAI.
@@ -15,7 +17,7 @@ class Alpaca
 
   def run_model(prompt)
     aggregated_prompt = format(ASSISTANT_PROMPT, prompt)
-    stdout, stderr, status = Open3.capture3("./llama.cpp/main -m ./llama.cpp/models/ggml-alpaca-7b-q4.bin -p \"#{aggregated_prompt.squish}\"")
+    stdout, stderr, status = ::Open3.capture3("./llama.cpp/main -m ./llama.cpp/models/ggml-alpaca-7b-q4.bin -p \"#{aggregated_prompt.squish}\"")
   end
 
   def complete(prompt)
