@@ -9,7 +9,7 @@ class CreateInitialTables < ActiveRecord::Migration[7.0]
     create_table :users do |t|
       t.timestamps
       t.text :username
-      t.text :password_hash
+      t.text :password_digest
     end
   end
 end
