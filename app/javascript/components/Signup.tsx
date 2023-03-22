@@ -1,20 +1,18 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
 import { useUserStore } from "../hooks/useUserStore";
 
-export const Login = () => {
+export const Signup = () => {
   const userStore = useUserStore();
 
   return (
     <div>
-      <Link to="/signup">Signup</Link>
-      <h1>Login</h1>
+      <h1>Sign up</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           const username = e.target[0].value;
           const password = e.target[1].value;
-          userStore.login(username, password);
+          userStore.signup(username, password);
         }}
       >
         <label>

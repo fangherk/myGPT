@@ -19,4 +19,19 @@ class SessionController < ApplicationController
       return head :unauthorized
     end
   end
+
+  def api_signup
+    permitted_params = params.permit(:username, :password)
+    user = User.find_by(username: permitted_params[:username])
+    if user
+      return render json: { error: "Username already exists" }
+    end
+
+    user = User.new(username: permitted_params[:username], password: permitted_params[:password])
+    if user.save
+      session[:user_id] = user.id
+      return render json: {}
+    end
+    return render json: { errors: user.error.full_messages }
+  end
 end

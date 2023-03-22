@@ -37,4 +37,20 @@ export class UserStore {
       this.currentUser = new User(username);
     }
   }
+
+  async signup(username, password) {
+    const result = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        username,
+        password,
+        [this.csrfParams.csrfParam]: this.csrfParams.csrfToken,
+      }),
+    });
+    if (result.status == 200) {
+      const body = await result.json();
+      this.currentUser = new User(username);
+    }
+  }
 }
