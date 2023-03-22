@@ -6,5 +6,8 @@ class ChatController < ApplicationController
     answer = alpaca.complete(prompt)
     render json: {"answer"=> answer}
   end
+
+  def index
+  end
 end
 
