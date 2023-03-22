@@ -1,6 +1,8 @@
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useRootStore } from "../hooks/useRootStore";
+import { Container, Input, FormLabel, Button, Text, FormControl, Box } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 export const Chat = observer(() => {
   const rootStore = useRootStore();
@@ -9,13 +11,17 @@ export const Chat = observer(() => {
     rootStore.chatStore.initWebsocket();
   }, []);
 
+  const navigate = useNavigate();
+
   return (
-    <div>
-      <span>Messages</span>
-      {rootStore.chatStore.chat.messages.map((text) => {
-        return <span>{text}</span>;
+    <Container centerContent>
+      <Text fontSize="5xl">Messages</Text>
+
+      {rootStore.chatStore.chat.messages.map((text, i) => {
+        return <Text key={i}>{text}</Text>;
       })}
-      <span>{rootStore.chatStore.chat.currentStream}</span>
+
+      <Text>{rootStore.chatStore.chat.currentStream}</Text>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -23,16 +29,29 @@ export const Chat = observer(() => {
           if (rootStore.chatStore.isSending || message === "") {
             return false;
           } else {
-            rootStore.chatStore.sendMessage(message);
+            rootStore.chatStore.chat.sendMessage(message);
+            e.target[0].value = "";
           }
         }}
       >
-        <label>
+        <FormLabel>
           Message
-          <input name="message"></input>
-        </label>
-        <button disabled={rootStore.chatStore.isSending}>Chat</button>
+          <Input name="message" placeholder="Type your message here"></Input>
+        </FormLabel>
+
+        <Button isLoading={rootStore.chatStore.isSending}>Chat</Button>
       </form>
-    </div>
+
+      <Box pos="absolute" top="8px" right="8px">
+        <Button
+          onClick={() => {
+            rootStore.userStore.logout();
+            navigate("/login");
+          }}
+        >
+          Logout
+        </Button>
+      </Box>
+    </Container>
   );
 });

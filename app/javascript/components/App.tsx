@@ -6,6 +6,7 @@ import { RootStoreContext } from "../hooks/useRootStore";
 import { Signup } from "./Signup";
 import { Chat } from "./Chat";
 import { RootStore } from "../stores/RootStore";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const router = createBrowserRouter([
   {
@@ -25,8 +26,10 @@ const router = createBrowserRouter([
 export const App = () => {
   const [store] = useState(() => new RootStore());
   return (
-    <RootStoreContext.Provider value={store}>
-      <RouterProvider router={router} />
-    </RootStoreContext.Provider>
+    <ChakraProvider>
+      <RootStoreContext.Provider value={store}>
+        <RouterProvider router={router} />
+      </RootStoreContext.Provider>
+    </ChakraProvider>
   );
 };

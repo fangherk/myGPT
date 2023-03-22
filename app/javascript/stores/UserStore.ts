@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { createContext } from "react";
 import { RootStore } from "./RootStore";
 
@@ -32,8 +32,23 @@ export class UserStore {
     });
     if (result.status == 200) {
       const body = await result.json();
-      this.currentUser = new User(username);
+
+      runInAction(() => {
+        this.currentUser = new User(username);
+      });
+
+      return this.currentUser;
     }
+  }
+
+  async logout() {
+    const _result = await fetch("/api/logout", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        [this.rootStore.csrfParams.csrfParam]: this.rootStore.csrfParams.csrfToken,
+      }),
+    });
   }
 
   async signup(username, password) {
@@ -48,7 +63,11 @@ export class UserStore {
     });
     if (result.status == 200) {
       const body = await result.json();
-      this.currentUser = new User(username);
+      runInAction(() => {
+        this.currentUser = new User(username);
+      });
+
+      return this.currentUser;
     }
   }
 }

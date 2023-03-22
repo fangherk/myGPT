@@ -1,30 +1,53 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
+import { Form, Link, useNavigate } from "react-router-dom";
 import { useRootStore } from "../hooks/useRootStore";
+import { Container, Text, FormLabel, Input, Button, VStack, FormControl } from "@chakra-ui/react";
 
 export const Signup = () => {
   const rootStore = useRootStore();
 
+  const [errors, setErrors] = useState(false);
+  const navigate = useNavigate();
+
+  const usernameRef = useRef<HTMLInputElement | null>(null);
+
   return (
-    <div>
-      <h1>Sign up</h1>
+    <Container>
+      <Text fontSize="5xl">Signup</Text>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           const username = e.target[0].value;
           const password = e.target[1].value;
-          rootStore.userStore.signup(username, password);
+          const res = await rootStore.userStore.signup(username, password);
+
+          if (res === undefined) {
+            setErrors(true);
+            e.target[0].value = "";
+            e.target[1].value = "";
+            if (usernameRef.current) {
+              usernameRef.current.focus();
+            }
+          } else {
+            navigate("/chat");
+          }
         }}
       >
-        <label>
-          Username
-          <input name="username"></input>
-        </label>
-        <label>
-          Password
-          <input name="password"></input>
-        </label>
-        <button type="submit">Submit</button>
+        <FormControl isInvalid={errors}>
+          <FormLabel>
+            Username
+            <Input name="username" ref={usernameRef}></Input>
+          </FormLabel>
+        </FormControl>
+
+        <FormControl isInvalid={errors}>
+          <FormLabel>
+            Password
+            <Input name="password" type="password"></Input>
+          </FormLabel>
+        </FormControl>
+        <Button type="submit">Submit</Button>
       </form>
-    </div>
+    </Container>
   );
 };

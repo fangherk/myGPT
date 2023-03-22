@@ -20,6 +20,11 @@ class SessionController < ApplicationController
     end
   end
 
+  def api_logout
+    session[:user_id] = nil
+    head :ok
+  end
+
   def api_signup
     permitted_params = params.permit(:username, :password)
     user = User.find_by(username: permitted_params[:username])

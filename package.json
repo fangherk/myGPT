@@ -2,9 +2,13 @@
   "name": "app",
   "private": "true",
   "dependencies": {
+    "@chakra-ui/react": "^2.5.2",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@hotwired/stimulus": "^3.2.1",
     "@hotwired/turbo-rails": "^7.3.0",
     "esbuild": "^0.17.12",
+    "framer-motion": "^10.8.4",
     "mobx": "^6.8.0",
     "mobx-react": "^7.6.0",
     "react": "^18.2.0",
