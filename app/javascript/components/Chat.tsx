@@ -1,7 +1,17 @@
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useRootStore } from "../hooks/useRootStore";
-import { Container, Input, FormLabel, Button, Text, FormControl, Box } from "@chakra-ui/react";
+import {
+  Container,
+  Input,
+  FormLabel,
+  Button,
+  Text,
+  FormControl,
+  Box,
+  VStack,
+  StackDivider,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 export const Chat = observer(() => {
@@ -17,11 +27,16 @@ export const Chat = observer(() => {
     <Container centerContent>
       <Text fontSize="5xl">Messages</Text>
 
-      {rootStore.chatStore.chat.messages.map((text, i) => {
-        return <Text key={i}>{text}</Text>;
-      })}
+      <VStack divider={<StackDivider borderColor="gray.200" />}>
+        {rootStore.chatStore.chat.messages.map((text, i) => {
+          return <Text key={i}>{text}</Text>;
+        })}
 
-      <Text>{rootStore.chatStore.chat.currentStream}</Text>
+        {rootStore.chatStore.chat.currentStream !== "" && (
+          <Text>{rootStore.chatStore.chat.currentStream}</Text>
+        )}
+      </VStack>
+
       <form
         onSubmit={(e) => {
           e.preventDefault();

@@ -14,9 +14,11 @@ Assistant:"""
 
   def run_model(prompt)
     aggregated_prompt = format(ASSISTANT_PROMPT, prompt)
-    cmd = "./llama.cpp/main -m ./llama.cpp/models/ggml-alpaca-7b-q4.bin -p \"#{aggregated_prompt}\" 2>/dev/null"
+    cmd = "./llama.cpp/main -m ./llama.cpp/models/ggml-alpaca-7b-q4.bin --color -p \"#{aggregated_prompt}\" 2>/dev/null"
     result = ""
     PTY.spawn(cmd) do |stdout, _, _|
+      has_seen_escape = false
+
       loop do
         ready = IO.select([stdout], nil, nil, 0.1) # wait for 0.1 seconds for input
         next unless ready # skip if no input is available
@@ -24,9 +26,23 @@ Assistant:"""
         begin
           output = stdout.read_nonblock(1024) # read up to 4096 bytes of output
           if output != ""
-            result+= output
-            puts output
-            UserChannel.broadcast_to(user, { output: })
+            new_output = nil
+            if output.include?("\e[0m")
+              splitted = output.split("\e[0m")
+
+              new_output
+              if !has_seen_escape
+                new_output = splitted[1..].join('')
+                has_seen_escape = true
+              else
+                new_output = splitted.join('')
+              end
+
+              result += new_output
+            elsif has_seen_escape
+              new_output = output
+            end
+            UserChannel.broadcast_to(user, { output: new_output }) if new_output.present?
           end
         rescue IO::WaitReadable, EOFError # handle exceptions
           # do nothing, just continue the loop
