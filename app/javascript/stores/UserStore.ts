@@ -20,12 +20,6 @@ export class UserStore {
     this.rootStore = rootStore;
   }
 
-  get csrfParams() {
-    const csrfToken = document.getElementsByName("csrf-token")[0].getAttribute("content")!;
-    const csrfParam = document.getElementsByName("csrf-param")[0].getAttribute("content")!;
-    return { csrfParam, csrfToken };
-  }
-
   async login(username, password) {
     const result = await fetch("/api/login", {
       method: "POST",
@@ -33,7 +27,7 @@ export class UserStore {
       body: JSON.stringify({
         username,
         password,
-        [this.csrfParams.csrfParam]: this.csrfParams.csrfToken,
+        [this.rootStore.csrfParams.csrfParam]: this.rootStore.csrfParams.csrfToken,
       }),
     });
     if (result.status == 200) {
@@ -49,7 +43,7 @@ export class UserStore {
       body: JSON.stringify({
         username,
         password,
-        [this.csrfParams.csrfParam]: this.csrfParams.csrfToken,
+        [this.rootStore.csrfParams.csrfParam]: this.rootStore.csrfParams.csrfToken,
       }),
     });
     if (result.status == 200) {

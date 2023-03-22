@@ -23,4 +23,16 @@ export class ChatStore {
       }
     );
   }
+
+  async sendMessage(message, chatId = null) {
+    const result = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        message,
+        chatId,
+        [this.rootStore.csrfParams.csrfParam]: this.rootStore.csrfParams.csrfToken,
+      }),
+    });
+  }
 }

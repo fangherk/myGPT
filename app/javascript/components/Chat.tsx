@@ -10,7 +10,12 @@ export const Chat = () => {
 
   return (
     <div>
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          rootStore.chatStore.sendMessage("hello");
+        }}
+      >
         <label>
           Message
           <input name="message"></input>
