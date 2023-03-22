@@ -7,7 +7,14 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - cache:/data
-volumes:
-  cache:
-    driver: local
+      - ./docker/cache:/data
+  database:
+    restart: always
+    image: postgres:14
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./docker/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
