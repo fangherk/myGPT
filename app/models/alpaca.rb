@@ -42,6 +42,7 @@ Assistant:"""
             elsif has_seen_escape
               new_output = output
             end
+            puts output
             UserChannel.broadcast_to(user, { output: new_output }) if new_output.present?
           end
         rescue IO::WaitReadable, EOFError # handle exceptions

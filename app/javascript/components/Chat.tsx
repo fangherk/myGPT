@@ -37,25 +37,27 @@ export const Chat = observer(() => {
         )}
       </VStack>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const message = e.target[0].value;
-          if (rootStore.chatStore.isSending || message === "") {
-            return false;
-          } else {
-            rootStore.chatStore.chat.sendMessage(message);
-            e.target[0].value = "";
-          }
-        }}
-      >
-        <FormLabel>
-          Message
-          <Input name="message" placeholder="Type your message here"></Input>
-        </FormLabel>
+      <Box pos="fixed" bottom="8px">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const message = e.target[0].value;
+            if (rootStore.chatStore.isSending || message === "") {
+              return false;
+            } else {
+              rootStore.chatStore.chat.sendMessage(message);
+              e.target[0].value = "";
+            }
+          }}
+        >
+          <FormLabel>
+            Message
+            <Input name="message" placeholder="Type your message here"></Input>
+          </FormLabel>
 
-        <Button isLoading={rootStore.chatStore.isSending}>Chat</Button>
-      </form>
+          <Button isLoading={rootStore.chatStore.isSending}>Chat</Button>
+        </form>
+      </Box>
 
       <Box pos="absolute" top="8px" right="8px">
         <Button
