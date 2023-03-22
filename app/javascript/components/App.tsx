@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Login } from "./Login";
 import { UserStore } from "../stores/UserStore";
-import { UserStoreContext } from "../hooks/useUserStore";
+import { RootStoreContext } from "../hooks/useRootStore";
 import { Signup } from "./Signup";
+import { Chat } from "./Chat";
+import { RootStore } from "../stores/RootStore";
 
 const router = createBrowserRouter([
   {
@@ -14,13 +16,17 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
+  {
+    path: "/chat",
+    element: <Chat />,
+  },
 ]);
 
 export const App = () => {
-  const [store] = useState(() => new UserStore());
+  const [store] = useState(() => new RootStore());
   return (
-    <UserStoreContext.Provider value={store}>
+    <RootStoreContext.Provider value={store}>
       <RouterProvider router={router} />
-    </UserStoreContext.Provider>
+    </RootStoreContext.Provider>
   );
 };

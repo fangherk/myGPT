@@ -1,8 +1,7 @@
 
 class UserChannel < ApplicationCable::Channel
   def subscribed
-    reject
-    stream_from "chat"
-    ActionCable.server.broadcast("chat", { hello: "hello"})
+    stream_for connection.current_user
+    broadcast_to(connection.current_user, {"message": "Connected!"})
   end
 end

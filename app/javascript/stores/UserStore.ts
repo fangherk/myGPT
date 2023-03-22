@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { createContext } from "react";
+import { RootStore } from "./RootStore";
 
 class User {
   username: string;
@@ -12,8 +13,11 @@ class User {
 
 export class UserStore {
   currentUser: User | null = null;
-  constructor() {
+  rootStore: RootStore;
+
+  constructor(rootStore) {
     makeAutoObservable(this);
+    this.rootStore = rootStore;
   }
 
   get csrfParams() {

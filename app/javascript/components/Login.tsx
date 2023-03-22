@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useUserStore } from "../hooks/useUserStore";
+import { useRootStore } from "../hooks/useRootStore";
 
 export const Login = () => {
-  const userStore = useUserStore();
+  const rootStore = useRootStore();
 
   return (
     <div>
@@ -14,7 +14,7 @@ export const Login = () => {
           e.preventDefault();
           const username = e.target[0].value;
           const password = e.target[1].value;
-          userStore.login(username, password);
+          rootStore.userStore.login(username, password);
         }}
       >
         <label>

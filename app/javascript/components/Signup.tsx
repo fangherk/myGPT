@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { useUserStore } from "../hooks/useUserStore";
+import { useRootStore } from "../hooks/useRootStore";
 
 export const Signup = () => {
-  const userStore = useUserStore();
+  const rootStore = useRootStore();
 
   return (
     <div>
@@ -12,7 +12,7 @@ export const Signup = () => {
           e.preventDefault();
           const username = e.target[0].value;
           const password = e.target[1].value;
-          userStore.signup(username, password);
+          rootStore.userStore.signup(username, password);
         }}
       >
         <label>
