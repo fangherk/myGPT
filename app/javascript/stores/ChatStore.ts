@@ -27,8 +27,10 @@ class Chat {
           this.chatStore.rootStore.csrfParams.csrfToken,
       }),
     });
+    const body = await result.json();
+
     runInAction(() => {
-      console.log("here");
+      this.chatStore.chat.chatId = body.chatId;
       this.chatStore.isSending = false;
     });
   }

@@ -1,20 +1,35 @@
 require 'pty'
 
 class Alpaca
-  ASSISTANT_PROMPT = """Assistant is a large language model trained by OpenAI.
+  FIRST_PROMPT = """Assistant is a large language model trained by OpenAI.
 Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
-
-Human: %s
-Assistant:"""
+"""
 
   attr :user
-  def initialize(user)
+
+  def initialize(user, chat_messages)
     @user = user
+    @chat_messages = chat_messages
+  end
+  
+  def create_full_context(new_message)
+    final_messages = []
+    @chat_messages.each do |message|
+      if message['user'] == 'MODEL'
+        final_messages << "Assistant: #{message['text']}"
+      else
+        final_messages << "Human: #{message['text']}"
+      end
+    end
+
+    final_s = final_messages.join('\n')
+    
+    "#{FIRST_PROMPT}\n#{final_s}\nHuman: #{new_message}\nAssistant:"
   end
 
-  def run_model(prompt)
-    aggregated_prompt = format(ASSISTANT_PROMPT, prompt)
-    cmd = "./llama.cpp/main -m ./llama.cpp/models/ggml-alpaca-7b-q4.bin --color -p \"#{aggregated_prompt}\" 2>/dev/null"
+  def run_model(new_message)
+    aggregated_prompt = create_full_context(new_message)
+    cmd = "./llama.cpp/main -m ./llama.cpp/models/ggml-alpaca-7b-q4.bin --temp 0.2 --color -p \"#{aggregated_prompt}\" 2>/dev/null"
     result = ""
     PTY.spawn(cmd) do |stdout, _, _|
       has_seen_escape = false
